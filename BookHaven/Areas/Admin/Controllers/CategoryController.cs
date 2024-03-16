@@ -1,19 +1,22 @@
 ﻿using BookHaven.DataAccess.Data;
+using BookHaven.DataAccess.Repository;
+using BookHaven.DataAccess.Repository.IRepository;
 using BookHaven.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookHaven.Controllers
+namespace BookHaven.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _appDbprovider;
-        public CategoryController(AppDbContext appDbprovider)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _appDbprovider = appDbprovider;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> CategoryList = _appDbprovider.Categories.ToList();
+            List<Category> CategoryList = _unitOfWork.categoryRepository.GetAll().ToList();
             return View(CategoryList);
         }
 
@@ -35,8 +38,8 @@ namespace BookHaven.Controllers
                     }
                     if (ModelState.IsValid) //tocheck Data Annotations
                     {
-                        _appDbprovider.Categories.Add(category);
-                        _appDbprovider.SaveChanges();
+                        _unitOfWork.categoryRepository.Add(category);
+                        _unitOfWork.Save();
                         TempData["success"] = "Category added Successfully";
                         return RedirectToAction("Index");
                     }
@@ -57,17 +60,16 @@ namespace BookHaven.Controllers
                 {
                     return NotFound();
                 }
-                var categoryDb = _appDbprovider.Categories.FirstOrDefault(x => x.Id == id);
+                var categoryDb = _unitOfWork.categoryRepository.Get(x => x.Id == id);
                 if (categoryDb == null)
                 {
                     return NotFound();
                 }
                 return View(categoryDb);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                throw new Exception(e.Message);
             }
         }
 
@@ -80,8 +82,8 @@ namespace BookHaven.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        _appDbprovider.Update(category); //will automatically check for id and update
-                        _appDbprovider.SaveChanges();
+                        _unitOfWork.categoryRepository.Update(category); //will automatically check for id and update
+                        _unitOfWork.Save();
                         TempData["success"] = "Category edited Successfully";
                         return RedirectToAction("Index");
                     }
@@ -103,7 +105,7 @@ namespace BookHaven.Controllers
                 {
                     return NotFound();
                 }
-                var categoryToDelete = _appDbprovider.Categories.FirstOrDefault(x => x.Id == id);
+                var categoryToDelete = _unitOfWork.categoryRepository.Get(x => x.Id == id);
                 if (categoryToDelete == null)
                 {
                     return NotFound();
@@ -116,16 +118,16 @@ namespace BookHaven.Controllers
             }
         }
 
-        [HttpPost,ActionName("DeleteCategory")]
+        [HttpPost, ActionName("DeleteCategory")]
         public IActionResult DeleteCategoryPost(int? id)
         {
             try
             {
-                var categorytodelete=_appDbprovider.Categories.FirstOrDefault(x=>x.Id==id);
-                if (categorytodelete!=null)
+                var categorytodelete = _unitOfWork.categoryRepository.Get(x => x.Id == id);
+                if (categorytodelete != null)
                 {
-                    _appDbprovider.Categories.Remove(categorytodelete);
-                    _appDbprovider.SaveChanges();
+                    _unitOfWork.categoryRepository.Remove(categorytodelete);
+                    _unitOfWork.Save();
                     TempData["success"] = "Category deleted Successfully";
                     return RedirectToAction("Index");
                 }
