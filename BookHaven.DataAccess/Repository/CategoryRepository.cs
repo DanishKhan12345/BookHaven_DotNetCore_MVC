@@ -12,7 +12,7 @@ namespace BookHaven.DataAccess.Repository
 {
     public class CategoryRepository : Repository<Category>,ICategoryRepository
     {
-        private AppDbContext _appDbContext;
+        private readonly AppDbContext _appDbContext;
         public CategoryRepository(AppDbContext appDbContext) : base(appDbContext)
         {
             _appDbContext = appDbContext;
@@ -20,7 +20,7 @@ namespace BookHaven.DataAccess.Repository
        
         public void Update(Category category)
         {
-            _appDbContext.Update(category);
+            _appDbContext.Categories.Update(category);
         }
     }
 }

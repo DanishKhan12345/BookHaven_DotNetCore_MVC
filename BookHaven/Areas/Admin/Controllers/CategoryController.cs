@@ -78,15 +78,12 @@ namespace BookHaven.Areas.Admin.Controllers
         {
             try
             {
-                if (category != null)
+                if (category != null && ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
-                    {
-                        _unitOfWork.categoryRepository.Update(category); //will automatically check for id and update
-                        _unitOfWork.Save();
-                        TempData["success"] = "Category edited Successfully";
-                        return RedirectToAction("Index");
-                    }
+                    _unitOfWork.categoryRepository.Update(category); //will automatically check for id and update
+                    _unitOfWork.Save();
+                    TempData["success"] = "Category edited Successfully";
+                    return RedirectToAction("Index");
                 }
                 return View();
             }

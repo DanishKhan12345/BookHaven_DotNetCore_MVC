@@ -11,16 +11,23 @@ namespace BookHaven.DataAccess.Repository
     public class UnitOfWork : IUnitOfWork
     {
         public ICategoryRepository categoryRepository { get; private set; }
-        private AppDbContext _appDbContext;
+        public IProductRepository productRepository { get; private set; }
+        private readonly AppDbContext _appDbContext;
         public UnitOfWork(AppDbContext appDbContext) 
         {
             _appDbContext = appDbContext;
             categoryRepository = new CategoryRepository(appDbContext);
+            productRepository = new ProductRepository(appDbContext);
         }
 
         public void Save()
         {
             _appDbContext.SaveChanges();
+        }
+
+        public void Dispose() 
+        {
+            _appDbContext?.Dispose();
         }
     }
 }

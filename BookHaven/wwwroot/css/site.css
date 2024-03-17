@@ -7,13 +7,15 @@ a.navbar-brand {
 
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #fff;
+    color : #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
 
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -38,13 +40,6 @@ button.accept-policy {
     font-size: 1rem;
     line-height: inherit;
 }
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-
 
 .badge {
     background-color: rgba(189, 116, 24, 0.6);
@@ -296,9 +291,7 @@ bg-success {
     .btn-check:focus + .btn-danger, .btn-danger:focus {
         color: #fff;
         background-color: #d9534f;
-        ;
         border-color: #d9534f;
-        ;
         box-shadow: 0 0 0 0.25rem rgba(223, 109, 105, 0.5);
     }
 

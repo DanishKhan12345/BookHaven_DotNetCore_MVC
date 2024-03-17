@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace BookHaven.DataAccess.Repository.IRepository
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork :IDisposable
     {
         ICategoryRepository categoryRepository { get; }
+        IProductRepository productRepository { get; }
         void Save();
     }
 }
