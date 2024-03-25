@@ -19,22 +19,38 @@ namespace BookHaven.DataAccess.Repository
         { 
             _appDbContext = appDbContext;
             dbset = _appDbContext.Set<T>();
+            _appDbContext.Products.Include(x => x.Category).Include(x=>x.CategoryId);
         }
         public void Add(T entity)
         {
             dbset.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbset;
-            query=query.Where(filter);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            query =query.Where(filter);
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        //Category. Cover Type
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbset;
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 
