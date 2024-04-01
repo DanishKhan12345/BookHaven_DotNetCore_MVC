@@ -1,12 +1,15 @@
 ﻿using BookHaven.DataAccess.Repository.IRepository;
 using BookHaven.Models;
 using BookHaven.Models.ViewModels;
+using BookHaven.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookHaven.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = StaticDetails.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -109,94 +112,6 @@ namespace BookHaven.Areas.Admin.Controllers
                 throw new Exception("Error Adding Product" + e.Message);
             }
         }
-
-        //public IActionResult EditProduct(int? id)
-        //{
-        //    try
-        //    {
-        //        if (id == null || id == 0)
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            var productToUpdate = _unitOfWork.productRepository.Get(x => x.Id == id);
-        //            if (productToUpdate == null)
-        //            {
-        //                return NotFound();
-        //            }
-        //            return View(productToUpdate);
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception("Error Updating Product" + e.Message);
-        //    }
-        //}
-
-        //[HttpPost]
-        //public IActionResult EditProduct(Product product)
-        //{
-        //    try
-        //    {
-        //        if (product != null && ModelState.IsValid)
-        //        {
-        //            _unitOfWork.productRepository.update(product);
-        //            _unitOfWork.Save();
-        //            TempData["success"] = "Product edited Successfully";
-        //            return RedirectToAction("Index");
-        //        }
-        //        return View();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception("Error Updating Product" + e.Message);
-        //    }
-        //}
-
-        //public IActionResult DeleteProduct(int id)
-        //{
-        //    try
-        //    {
-        //        if (id == 0)
-        //        {
-        //            return NotFound();
-        //        }
-        //        var productToDelete = _unitOfWork.productRepository.Get(x => x.Id == id);
-        //        if (productToDelete == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return View(productToDelete);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception("Error Deleting Product" + e.Message);
-        //    }
-        //}
-
-        //[HttpPost, ActionName("DeleteProduct")]
-        //public IActionResult DeleteProductPost(Product product)
-        //{
-        //    try
-        //    {
-        //        if (product != null)
-        //        {
-        //            _unitOfWork.productRepository.Remove(product);
-        //            _unitOfWork.Save();
-        //            TempData["success"] = "Product deleted Successfully";
-        //            return RedirectToAction("Index");
-        //        }
-        //        else
-        //        {
-        //            return NotFound();
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception("Error Deleting Product" + e.Message);
-        //    }
-        //}
 
         #region API CALL 
 
