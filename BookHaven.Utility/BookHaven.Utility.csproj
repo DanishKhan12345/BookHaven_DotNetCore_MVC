@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="datatables.net" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.3" />
   </ItemGroup>
 
 </Project>
