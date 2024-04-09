@@ -17,6 +17,8 @@ namespace BookHaven.DataAccess.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) //to Add data in Category Table
         {
@@ -110,6 +112,18 @@ namespace BookHaven.DataAccess.Data
                     Price100 = 20,
                     CategoryId = 4,
                     ImageUrl = ""
+                }
+                );
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company { 
+                    Id=1,
+                    Name = "DCompany",
+                    City = "New Delhi",
+                    PhoneNumber="9811262446",
+                    PostalCode="110018",
+                    State="Delhi",
+                    StreetAddress = "Vikas Puri"
                 }
                 );
         }

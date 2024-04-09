@@ -12,12 +12,16 @@ namespace BookHaven.DataAccess.Repository
     {
         public ICategoryRepository categoryRepository { get; private set; }
         public IProductRepository productRepository { get; private set; }
+        public ICompanyRepository companyRepository { get; private set; }
+        public IShoppingCartRepository shoppingCartRepository { get; private set; }
         private readonly AppDbContext _appDbContext;
         public UnitOfWork(AppDbContext appDbContext) 
         {
             _appDbContext = appDbContext;
             categoryRepository = new CategoryRepository(appDbContext);
             productRepository = new ProductRepository(appDbContext);
+            companyRepository = new CompanyRepository(appDbContext);
+            shoppingCartRepository = new ShoppingCartRepository(appDbContext);
         }
 
         public void Save()
