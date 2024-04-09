@@ -1,0 +1,40 @@
+﻿@model List<Company>
+
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Company List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-6 text-end">
+                    <a asp-controller="Company" asp-action="AddUpdateCompany" class="btn btn-primary">
+                        <i class="fa-solid fa-circle-plus"></i> Add New Company</i>
+                    </a>
+                </div>
+            </div>
+            <table id='tableData' class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>PhoneNumber</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+ 
+@section Scripts {
+    <script src="~/js/company.js"></script>
+} 

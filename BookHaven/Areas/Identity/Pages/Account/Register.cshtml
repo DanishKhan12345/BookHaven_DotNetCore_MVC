@@ -41,7 +41,7 @@
                         <label asp-for="Input.ConfirmPassword" class="ms-2 text-muted">Confirm Password</label>
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-floating mb-3 col-md-6">
                         <input asp-for="Input.StreetAddress" class="form-control" placeholder="Address" />
                         <label asp-for="Input.StreetAddress" class="ms-2 text-muted">StreetAddress</label>
@@ -63,14 +63,19 @@
                         <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3 col-md-6">
-                        <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
+                        <select id="roleSelect" asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
                             <option disabled selected>-Select Role-</option>
+                        </select>
+                    </div>
+                    <div id="companyDiv" class="form-floating mb-3 col-md-6" style="display:none">
+                        <select asp-for="Input.CompanyId"  asp-items="@Model.Input.CompanyList" class="form-select">
+                            <option disabled selected>-Select Company-</option>
                         </select>
                     </div>
                     <div class="col-md-12">
                         <button id="registerSubmit" type="submit" class="w-100 btn btn-md btn-primary rounded">Register</button>
                     </div>
-                    
+
                 </form>
             </div>
             <div class="col-md-12">
@@ -113,4 +118,16 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('roleSelect').addEventListener('change', function () {
+            var role = this.value;
+            var companyDiv = document.getElementById('companyDiv');
+
+            if (role === 'Company') {
+                companyDiv.style.display = 'block'; // Show the company div
+            } else {
+                companyDiv.style.display = 'none'; // Hide the company div
+            }
+        });
+    </script>
 }
