@@ -14,21 +14,32 @@ namespace BookHaven.DataAccess.Repository
     {
         private readonly AppDbContext _appDbContext;
         internal DbSet<T> dbset;
-        
+
         public Repository(AppDbContext appDbContext)
-        { 
+        {
             _appDbContext = appDbContext;
             dbset = _appDbContext.Set<T>();
-            _appDbContext.Products.Include(x => x.Category).Include(x=>x.CategoryId);
+            _appDbContext.Products.Include(x => x.Category).Include(x => x.CategoryId);
+            //_appDbContext.ShoppingCarts.Include(x => x.product);
         }
         public void Add(T entity)
         {
             dbset.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbset;
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query = dbset;
+            }
+            else
+            {
+                query = dbset.AsNoTracking();
+            }
+
+            query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -36,14 +47,18 @@ namespace BookHaven.DataAccess.Repository
                     query = query.Include(includeProp);
                 }
             }
-            query =query.Where(filter);
+
             return query.FirstOrDefault();
         }
 
         //Category. Cover Type
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbset;
+            if (filter!=null )
+            {
+                query = query.Where(filter); 
+            }
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))

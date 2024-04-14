@@ -1,7 +1,9 @@
 using BookHaven.DataAccess.Repository.IRepository;
 using BookHaven.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BookHaven.Areas.Customer.Controllers
 {
@@ -31,8 +33,45 @@ namespace BookHaven.Areas.Customer.Controllers
                 {
                     return NotFound();
                 }
-                Product product = _unitOfWork.productRepository.Get(x => x.Id == productId, includeProperties: "Category");
-                return View(product);
+                ShoppingCart cart = new()
+                {
+                    product = _unitOfWork.productRepository.Get(x => x.Id == productId, includeProperties: "Category"),
+                    Count = 1,
+                    ProductId = productId
+                };
+                return View(cart);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error finding product" + e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart cart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            cart.ApplicationUserId = userId;
+
+            var cartFromDb = _unitOfWork.shoppingCartRepository.Get(x => x.ApplicationUserId == userId && x.ProductId == cart.ProductId);
+
+            try
+            {
+                if (cartFromDb != null)
+                {
+                    cartFromDb.Count += cart.Count;
+                    _unitOfWork.shoppingCartRepository.Update(cartFromDb);
+                    TempData["success"] = "Cart updated Successfully";
+                }
+                else if (cart != null && cartFromDb == null)
+                {
+                    _unitOfWork.shoppingCartRepository.Add(cart);
+                    TempData["success"] = "Cart added Successfully";
+                }
+                _unitOfWork.Save();
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
             {

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookHaven.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = StaticDetails.Role_Admin)]
+    //[Authorize(Roles = StaticDetails.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -77,6 +77,7 @@ namespace BookHaven.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult EditCategory(Category category)
         {
             try

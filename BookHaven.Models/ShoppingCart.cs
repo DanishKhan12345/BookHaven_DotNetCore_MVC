@@ -28,5 +28,7 @@ namespace BookHaven.Models
         [ValidateNever]
         public ApplicationUser applicationUser { get; set; }
 
+        [NotMapped]
+        public double Price { get; set; }
     }
 }

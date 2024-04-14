@@ -14,14 +14,20 @@ namespace BookHaven.DataAccess.Repository
         public IProductRepository productRepository { get; private set; }
         public ICompanyRepository companyRepository { get; private set; }
         public IShoppingCartRepository shoppingCartRepository { get; private set; }
+        public IApplicationUserRepository applicationUserRepository { get; private set; }
+        public IOrderHeaderRepository orderHeaderRepository { get; private set; }
+        public IOrderDetailRepository orderDetailRepository { get; private set; }
         private readonly AppDbContext _appDbContext;
         public UnitOfWork(AppDbContext appDbContext) 
         {
             _appDbContext = appDbContext;
-            categoryRepository = new CategoryRepository(appDbContext);
-            productRepository = new ProductRepository(appDbContext);
-            companyRepository = new CompanyRepository(appDbContext);
-            shoppingCartRepository = new ShoppingCartRepository(appDbContext);
+            categoryRepository = new CategoryRepository(_appDbContext);
+            productRepository = new ProductRepository(_appDbContext);
+            companyRepository = new CompanyRepository(_appDbContext);
+            shoppingCartRepository = new ShoppingCartRepository(_appDbContext);
+            applicationUserRepository = new ApplicationUserRepository(_appDbContext);
+            orderHeaderRepository = new OrderHeaderRepository(_appDbContext);
+            orderDetailRepository = new OrderDetailRepository(_appDbContext);
         }
 
         public void Save()
