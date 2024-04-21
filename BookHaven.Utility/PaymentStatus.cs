@@ -12,6 +12,6 @@ namespace BookHaven.Utility
 		Pending = 1,
 		Approved = 2,
 		ApprovedForDelayedPayment = 3,
-		Rejected = 4
+		Refunded = 4
 	}
 }

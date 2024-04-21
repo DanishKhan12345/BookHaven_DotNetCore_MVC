@@ -1,0 +1,15 @@
+﻿@model int
+
+<div class="container">
+    <div class="col-12 text-center">
+        <h1 class="text-primary text-center">"Payment Successfull!"</h1>
+        Your Order Number is : @Model <br></br>
+        <img src="~/images/lawn_leaf.jpg" height="50%" width="45%" onerror="this.src='https://placehold.co/600x400';" alt="Fallback Image" />
+    </div>
+    <div class="col-12 text-center" style="color:maroon">
+        <br />
+        Your Payment has been completed successfully!
+        <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-orderId = "@Model" class="btn btn-primary">Back to Order Details</a>
+        <br />
+    </div>
+</div>

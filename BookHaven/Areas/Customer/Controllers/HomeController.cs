@@ -1,6 +1,8 @@
 using BookHaven.DataAccess.Repository.IRepository;
 using BookHaven.Models;
+using BookHaven.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -21,7 +23,16 @@ namespace BookHaven.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> productList = _unitOfWork.productRepository.GetAll(includeProperties: "Category");
+			var claimsIdentity = (ClaimsIdentity)User.Identity;
+			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim != null)
+            {
+				HttpContext.Session.SetInt32(StaticDetails.SessionCart,
+                    _unitOfWork.shoppingCartRepository.GetAll(x => x.ApplicationUserId == claim.Value).Count());
+			}
+
+			IEnumerable<Product> productList = _unitOfWork.productRepository.GetAll(includeProperties: "Category");
             return View(productList);
         }
 
@@ -63,11 +74,15 @@ namespace BookHaven.Areas.Customer.Controllers
                 {
                     cartFromDb.Count += cart.Count;
                     _unitOfWork.shoppingCartRepository.Update(cartFromDb);
+                    _unitOfWork.Save();
                     TempData["success"] = "Cart updated Successfully";
                 }
                 else if (cart != null && cartFromDb == null)
                 {
                     _unitOfWork.shoppingCartRepository.Add(cart);
+                    _unitOfWork.Save();
+                    HttpContext.Session.SetInt32(StaticDetails.SessionCart, 
+                        _unitOfWork.shoppingCartRepository.GetAll(x => x.ApplicationUserId == userId).Count());
                     TempData["success"] = "Cart added Successfully";
                 }
                 _unitOfWork.Save();
