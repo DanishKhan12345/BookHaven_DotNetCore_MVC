@@ -23,15 +23,6 @@ namespace BookHaven.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-			var claimsIdentity = (ClaimsIdentity)User.Identity;
-			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (claim != null)
-            {
-				HttpContext.Session.SetInt32(StaticDetails.SessionCart,
-                    _unitOfWork.shoppingCartRepository.GetAll(x => x.ApplicationUserId == claim.Value).Count());
-			}
-
 			IEnumerable<Product> productList = _unitOfWork.productRepository.GetAll(includeProperties: "Category");
             return View(productList);
         }

@@ -21,7 +21,10 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookHaven</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    BookHaven
+                <img src="/images/book.png" style="width:30px"/>    
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -47,28 +50,19 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
                                     <li><hr class="dropdown-divider"></li>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register" >Create User</a>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">Manage User</a>
+                                    <li><hr class="dropdown-divider"></li>
                             </li>
                         </ul>
                         </li>
                         }
-                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetails.SessionCart) != null)
-                        {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                                <i class="fa-solid fa-cart-shopping"></i>&nbsp;
-                                    (@HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetails.SessionCart))
-                            </a>
+                                @await Component.InvokeAsync("ShoppingCart")
+                        </a>
                         </li>
-                        }
-                        else
-                        {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                                <i class="fa-solid fa-cart-shopping"></i>&nbsp;
-                                (0)
-                            </a>
-                        </li>
-                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -95,7 +89,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" />
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

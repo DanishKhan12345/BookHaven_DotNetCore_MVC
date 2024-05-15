@@ -172,7 +172,7 @@ namespace BookHaven.Areas.Admin.Controllers
                                             ,includeProperties:"product");
 
                 //stripe logic to add payment
-                var domain = "https://localhost:44351/";
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
                 var options = new Stripe.Checkout.SessionCreateOptions
                 {
                     SuccessUrl = domain + $"admin/order/PaymentConfirmation?orderHeaderId={orderdetails.orderHeader.Id}",

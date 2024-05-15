@@ -1,0 +1,52 @@
+﻿@model RoleManagementVM
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Add Category</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">
+            <input asp-for="applicationUser.Id" hidden />
+            <div class="border p-3">
+                <div class="row mb-3 p-1">
+                    <label asp-for="applicationUser.Name" class="col-6 border-0 shadow text-center"></label>
+                    <input asp-for="applicationUser.Name" class="col-6 border-light-subtle" />
+                </div>
+                <div class="row mb-3 p-1">
+                    <select asp-for="applicationUser.Role" asp-items="@Model.RoleList" class="form-select"></select>
+                </div>
+                @{
+                    var companyvisible = "display:none;";
+                }
+                @if (Model.applicationUser.Role == StaticDetails.Role_Company)
+                {
+                    companyvisible = "display:block;";
+                }
+                <div class="row mb-3 p-1">
+                    <select asp-for="applicationUser.CompanyId" style="@companyvisible" asp-items="@Model.CompanyList" class="form-select"></select>
+                </div>
+                <div class="row col-12 justify-content-center">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-primary form-control">Update Role</button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-controller="User" asp-action="Index" class="btn btn-secondary border form-control">Back to User Manager</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @* partial view for validation *@
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

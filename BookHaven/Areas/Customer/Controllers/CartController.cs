@@ -65,7 +65,7 @@ namespace BookHaven.Areas.Customer.Controllers
 			try
 			{
 				if (itemId == 0) return NotFound();
-				var cartFromDb = _unitOfWork.shoppingCartRepository.Get(x => x.Id == itemId);
+				var cartFromDb = _unitOfWork.shoppingCartRepository.Get(x => x.Id == itemId,tracked:true);
 				if (cartFromDb.Count <= 1)
 				{
 					HttpContext.Session.SetInt32(StaticDetails.SessionCart,
@@ -189,7 +189,7 @@ namespace BookHaven.Areas.Customer.Controllers
 			if (applicationUser.CompanyId.GetValueOrDefault() == 0)
 			{
 				//stripe logic to add payment
-				var domain = "https://localhost:44351/";
+				var domain = Request.Scheme + "://" + Request.Host.Value +"/";
 				var options = new Stripe.Checkout.SessionCreateOptions
 				{
 					SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
@@ -246,7 +246,7 @@ namespace BookHaven.Areas.Customer.Controllers
 						_unitOfWork.orderHeaderRepository.UpdateStatus(id, ShipmentStatus.Approved, PaymentStatus.Approved);
 						_unitOfWork.Save();
 					}
-
+					HttpContext.Session.Clear();
 				}
 			}
 			catch (Exception e)

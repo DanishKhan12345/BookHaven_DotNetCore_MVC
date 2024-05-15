@@ -210,7 +210,13 @@ namespace BookHaven.Areas.Identity.Pages.Account
                     }
                     else
                     {
+                        if (User.IsInRole(StaticDetails.Role_Admin))
+                        {
+                            TempData["sucess"] = "User Created Successfully";
+                        }
+                        else { 
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }
